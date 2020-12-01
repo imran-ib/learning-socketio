@@ -21,13 +21,6 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket: Socket) => {
-  socket.emit("message", generateMessage("Welcome"));
-
-  socket.broadcast.emit(
-    "message",
-    generateMessage("A New User Has Joined The chat")
-  );
-
   socket.on("newMessage", (message, cb) => {
     const filter = new Filter();
     if (filter.isProfane(message)) {
@@ -45,6 +38,15 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("disconnect", () => {
     io.emit("message", generateMessage("A User Has Left the Chat"));
+  });
+
+  socket.on("join", ({ username, room }) => {
+    socket.join(room);
+    socket.emit("message", generateMessage(`Welcome! ${username} 🙂 `));
+
+    socket.broadcast
+      .to(room)
+      .emit("message", generateMessage(` ${username} Has Joined The chat`));
   });
 });
 

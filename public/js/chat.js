@@ -12,6 +12,12 @@ const MessageTemplate = document.getElementById("message-template").innerHTML;
 const LocationTemplate = document.getElementById("my-location-template")
   .innerHTML;
 
+//Options
+
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
 socket.on("NewUser", (str) => {
   console.log("🚀 ~ file: chat.js ~ line 13 ~ socket.on ~ str", { str });
 });
@@ -63,3 +69,5 @@ socket.on("LocationMessage", (data) => {
   });
   $myLocation.insertAdjacentHTML("beforeend", html);
 });
+
+socket.emit("join", { username, room });
