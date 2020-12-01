@@ -1,5 +1,7 @@
 export const users = [];
 
+// new file
+
 export const addUser = ({ id, username, room }) => {
   // Clean the data
   username = username.trim().toLowerCase();
